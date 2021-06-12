@@ -1,4 +1,4 @@
-//taken this code and help to understand it from Samragyi 
+ //taken this code and help to understand it from Samragyi 
 #include<stdio.h>
 #include<stdlib.h>              // for memory allocation and exit()
 #include<conio.h>               // for getch()
