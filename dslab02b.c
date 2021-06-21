@@ -1,26 +1,26 @@
-#include <stdio.h>  //taken help from samragyi
+#include <stdio.h>
 #include <stdlib.h> // for dynamic memory allocation and exit()
 #include <conio.h>  // for getch()
 // Structure representing stack
-struct stack
+struct Stack
 {
-    int *array; // stores the elements in the stack
-    int top;    // index of the top element
-    int Size;   // Total size of the stack
+    int *array;  // stores the elements in the stack
+    int top;     // index of the top element
+    int maxSize; // Maximum size of the stack
 };
 // For creating the stack and allocating the memory
-struct stack *create_stack(int Size)
+struct Stack *createStack(int maxSize)
 {
-    struct stack *s = (struct stack *)malloc(sizeof(struct stack));
-    s->Size = Size;
+    struct Stack *s = (struct Stack *)malloc(sizeof(struct Stack));
+    s->maxSize = maxSize;
     s->top = -1; // initialization to -1 shows that the stack is empty
-    s->array = (int *)malloc(s->Size * sizeof(int));
+    s->array = (int *)malloc(s->maxSize * sizeof(int));
     return s;
 }
 // isFull() for checking if the stack is full
-int isFull(struct stack *s)
+int isFull(struct Stack *s)
 {
-    if (s->top == s->Size - 1)
+    if (s->top == s->maxSize - 1)
     { // when top is equal to the last index, the stack is full
         return 1;
     }
@@ -28,7 +28,7 @@ int isFull(struct stack *s)
         return 0;
 }
 // isEmpty() for checking if the stack is empty
-int isEmpty(struct stack *s)
+int isEmpty(struct Stack *s)
 {
     // when top is equal to -1, the stack is empty
     if (s->top == -1)
@@ -39,7 +39,7 @@ int isEmpty(struct stack *s)
         return 0;
 }
 // push() for pushing an element in the stack.
-void push(struct stack *s, int element)
+void push(struct Stack *s, int element)
 {
     if (isFull(s))
     { // calling the isFull() function to check if the stack is full
@@ -52,21 +52,17 @@ void push(struct stack *s, int element)
     }
 }
 // pop() for deleting/removing the top most element from the stack
-int pop(struct stack *s)
+int pop(struct Stack *s)
 {
-    int ret;
     if (isEmpty(s))
-    {   // calling the isEmpty() function to check if the stack is empty
-        return -1;
+    { // calling the isEmpty() function to check if the stack is empty
+        return 0;
     }
-    else{
-        ret = s->top;
-        s->top--;       // decrementing top by 1
-    }
-    return ret ;
+    else
+        return s->array[s->top--]; // decrementing top by 1
 }
 // for displaying the elements present in the stack
-void display_elements(struct stack *s)
+void displayElements(struct Stack *s)
 {
     if (isEmpty(s))
     {
@@ -87,16 +83,16 @@ void display_elements(struct stack *s)
 int main()
 {
     printf("\t\t STACK IMPLEMENTATION \n");
-    int choice, element, popped, Size;
+    int choice, element, popped, maxSize;
     printf("Enter the size of the stack : ");
-    scanf("%d", &Size);
-    struct stack *s = create_stack(Size);
+    scanf("%d", &maxSize);
+    struct Stack *s = createStack(maxSize); // calling the createStack() function
     do
     {
         printf("\t OPERATIONS \n");
         printf(" 1. Push \n 2. Pop \n 3. Display elements \n 4. Exit \n");
         printf("Enter your choice : ");
-        scanf("%d", &choice);
+        scanf("%d", &choice); // input choice from the user
         switch (choice)
         {
         case 1:
@@ -107,14 +103,17 @@ int main()
             break;
         case 2:
             printf("\n \t Popping from stack \n");
-            popped = pop(s);    // calling the pop function
-            if(popped == -1){
+            popped = pop(s); // calling the pop function
+            if (s->top == -1 && popped == 0)
+            {
+                // s->top is -1 which means the stack is empty
                 printf("UNDERFLOW!!! Stack is empty! \n");
-            }else 
-                printf("%d popped from the stack \n", s->array[popped]);
+            }
+            else
+                printf("%d popped from the stack \n", popped);
             break;
         case 3:
-            display_elements(s); // calling the display function
+            displayElements(s); // calling the display function
             break;
         case 4:
             exit(0);
